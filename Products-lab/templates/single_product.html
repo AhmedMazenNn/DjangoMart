@@ -3,14 +3,12 @@
 {% block main_content %}
 <div class="container my-5">
     <div class="row">
-        <!-- Product Image -->
         <div class="col-md-6">
             <div class="product-image-container">
                 <img src="{{ product.thumbnail }}" alt="{{ product.title }}" class="img-fluid">
             </div>
         </div>
 
-        <!-- Product Details -->
         <div class="col-md-6">
             <div class="product-details card border-0 shadow-sm p-4">
                 <h1 class="text-primary fw-bold">{{ product.title }}</h1>
@@ -34,7 +32,6 @@
     </div>
 </div>
 
-<!-- Custom Styles -->
 <style>
     .product-image-container img {
         max-height: 400px;
