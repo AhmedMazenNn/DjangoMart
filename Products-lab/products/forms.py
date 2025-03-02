@@ -4,7 +4,7 @@ from .models import Product, Category
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["title", "description", "price", "rating", "tags", "thumbnail", "category", "cover"]
+        exclude = ("created_at" , "updated_at" , "tags")
 
 class CategoryForm(forms.ModelForm):
     class Meta:

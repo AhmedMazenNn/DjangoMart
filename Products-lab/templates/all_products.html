@@ -13,8 +13,13 @@
             <div class="col-md-6 col-lg-4 col-xl-3">
                 <div class="product-card card shadow-sm border-0 h-100">
                     <a href="{% url 'one_product' pk=product.id %}" class="text-decoration-none">
-                        <img src="{{ product.thumbnail }}" class="card-img-top rounded-top" alt="{{ product.title }}">
+                        {% if product.cover %}
+                            <img src="{{ product.cover.url }}" class="card-img-top rounded-top" alt="{{ product.title }}">
+                        {% else %}
+                            <img src="{{ product.thumbnail }}" class="card-img-top rounded-top" alt="{{ product.title }}">
+                        {% endif %}
                     </a>
+                    
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-primary fw-bold">{{ product.title }}</h5>
                         <p class="card-text text-muted">{{ product.description }}</p>
