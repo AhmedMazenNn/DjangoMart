@@ -1,7 +1,13 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy 
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Product, Category
+from .models import Product, Category , Cart
 from .forms import ProductForm ,CategoryForm
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # start products
 class ProductListView(ListView): #view all products
     model = Product
@@ -15,20 +21,38 @@ class ProductDetailView(DetailView): #view single product
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
-    template_name = "product_form.html"
+    template_name = "products/forms/product_form.html"
     success_url = reverse_lazy("all_products")
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.warning(request, "You do not have permission to delete this product.")
+            return redirect("all_products")
+        return super().dispatch(request, *args, **kwargs)
 
-class ProductUpdateView(UpdateView):  # Update product
+
+class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
-    template_name = "product_form.html"
+    template_name = "products/forms/product_form.html"
     success_url = reverse_lazy("all_products")
 
-class ProductDeleteView(DeleteView): #delete product
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.warning(request, "You do not have permission to delete this product.")
+            return redirect("all_products")
+        return super().dispatch(request, *args, **kwargs)
+
+class ProductDeleteView(DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("all_products")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.warning(request, "You do not have permission to delete this product.")
+            return redirect("all_products")
+        return super().dispatch(request, *args, **kwargs)
 
 #end product
 
@@ -43,21 +67,51 @@ class CategoryDetailView(DetailView): #view single category
     context_object_name = "category"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["products"] = Product.objects.filter(category=self.object)  # Filter products by category
+        context["products"] = Product.objects.filter(category=self.object)
         return context
 
-class CategoryCreateView(CreateView):  # Add category
-    model = Category
-    form_class = CategoryForm 
-    template_name = "category_form.html"
-    success_url = reverse_lazy("all_categories")
-
-class CategoryUpdateView(UpdateView):  # Update category
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = "category_form.html"
+    template_name = "products/forms/category_form.html"
     success_url = reverse_lazy("all_categories")
-class CategoryDeleteView(DeleteView): #dalete category
+
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "products/forms/category_form.html"
+    success_url = reverse_lazy("all_categories")
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     template_name = "category_confirm_delete.html"
     success_url = reverse_lazy("all_categories")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.warning(request, "You do not have permission to delete this product.")
+            return redirect("all_products")
+        return super().dispatch(request, *args, **kwargs)
+
+# end category
+
+@login_required
+def create_cart(request, pk):
+    product = get_object_or_404(Product, id=pk)
+
+    if not Cart.objects.filter(user=request.user, product=product).exists():
+        Cart.objects.create(user=request.user, product=product)
+        messages.success(request, f"{product.title} added to cart!")
+    else:
+        messages.info(request, f"{product.title} is already in your cart.")
+
+    return redirect("all_products")
+class DetailCart(LoginRequiredMixin,ListView):
+    model = Cart
+    template_name = 'cart_detail.html'
+    context_object_name = 'cart'
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Cart.objects.filter(user = user)
+
