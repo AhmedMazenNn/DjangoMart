@@ -1,42 +1,62 @@
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'products/css/style.css' %}"/>
-
-<ul class="nav nav-pills nav-justified">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'all_products' %}">Products</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'all_categories' %}">Categories</a> 
-  </li>
-</ul>
-
+<link rel="stylesheet" type="text/css" href="{% static 'products/css/navigation.css' %}"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        let currentUrl = window.location.href;
-        $(".nav-link").each(function() {
-            if (this.href === currentUrl) {
-                $(".nav-link").removeClass("active");
-                $(this).addClass("active");
-            }
-        });
-    });
-</script>
 
-<style>
-    .nav-pills .nav-link {
-        color: #007bff;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    }
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm py-2">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'all_products' %}">🛍️ Shop</a>
 
-    .nav-pills .nav-link:hover {
-        background-color: #007bff;
-        color: white;
-    }
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    .nav-pills .nav-link.active {
-        background-color: #007bff !important;
-        color: white !important;
-    }
-</style>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto d-flex flex-row justify-content-around">
+                <li class="nav-item me-4">
+                    <a class="btn btn-outline-primary fw-bold w-auto" href="{% url 'all_products' %}">
+                        Products <i class="fa-brands fa-product-hunt"></i>
+                    </a>
+                </li>
+                <li class="nav-item me-4">
+                    <a class="btn btn-outline-primary fw-bold w-auto" href="{% url 'all_categories' %}">
+                        Categories <i class="fa-solid fa-list"></i>
+                    </a> 
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary fw-bold w-auto" href="{% url 'detail_cart' %}">
+                        Cart <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto align-items-center">
+                {% if user.is_authenticated %}
+                    <li class="nav-item me-3">
+                        <a class="btn btn-outline-primary" href="{% url 'profile' %}">
+                            <i class="fa-solid fa-user"></i> Welcome, {{ user.username }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="logout btn btn-danger">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="fw-bold dropdown-toggle btn btn-outline-warning" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<script src="{% static 'products/js/navigation.js' %}" ></script>
+
