@@ -1,6 +1,11 @@
 .product-card {
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     border-radius: 10px;
+    max-width: 100%;
+    height: auto; /* Adjust height automatically */
+    display: flex;
+    flex-direction: column;
+    padding: 10px; /* Reduce padding for a more compact look */
 }
 
 .product-card:hover {
@@ -8,7 +13,32 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.card img {
-    height: 200px;
+.product-card img {
+    height: 150px; /* Reduced height to make the card smaller */
     object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px; /* Less padding for a smaller card */
+}
+
+.product-card .card-title {
+    font-size: 1rem; /* Reduce font size for a more compact look */
+}
+
+.product-card .card-text {
+    font-size: 0.85rem; /* Smaller description text */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-card .btn {
+    margin-top: auto;
+    padding: 6px 12px; /* Reduce button size */
+    font-size: 0.9rem;
 }

@@ -15,7 +15,13 @@
 }
 
 @media (max-width: 992px) {
-    .logout{
-        margin-top: 30px;
+    .navbar-nav {
+        align-items: center !important; /* Center buttons */
+    }
+    .nav-item {
+        width: 100%; /* Make buttons full width in mobile */
+    }
+    .logout {
+        margin-top: 10px;
     }
 }
