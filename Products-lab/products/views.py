@@ -106,6 +106,20 @@ def create_cart(request, pk):
         messages.info(request, f"{product.title} is already in your cart.")
 
     return redirect("all_products")
+
+@login_required
+def remove_from_cart(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    cart_item = Cart.objects.filter(user=request.user, product=product).first()
+
+    if cart_item:
+        cart_item.delete()
+        messages.success(request, f"{product.title} removed from cart!")
+    else:
+        messages.warning(request, f"{product.title} was not in your cart.")
+
+    return redirect("all_products")
+
 class DetailCart(LoginRequiredMixin,ListView):
     model = Cart
     template_name = 'cart_detail.html'
@@ -113,5 +127,5 @@ class DetailCart(LoginRequiredMixin,ListView):
     
     def get_queryset(self):
         user = self.request.user
-        return Cart.objects.filter(user = user)
+        return Cart.objects.filter(user=user).select_related("product")  # Prefetch related products
 

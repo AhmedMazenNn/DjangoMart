@@ -30,6 +30,12 @@
                             <a href="{% url 'one_product' pk=item.product.id %}" class="btn btn-outline-primary w-100">
                                 View Details
                             </a>
+                            {% if item.product.id %}
+                            <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger mt-2">Remove</a>
+                            {% else %}
+                            <span class="text-danger">Error: Product ID missing</span>
+                            {% endif %}
+                        
                         </div>
                     </div>
                 </div>
