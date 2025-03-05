@@ -28,6 +28,7 @@ urlpatterns = ([
     path('login/' , auth_views.LoginView.as_view(template_name ='accounts/login.html'), name='login'),
     path('logout/' , account_views.logout_view, name='logout'),
     path('profile/' , account_views.profile, name='profile'),
+    path('api/', include('api.urls'))
 
 
 
