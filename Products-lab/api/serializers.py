@@ -6,9 +6,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         exclude = ("created_at", "updated_at",)
 
-class CartSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)  
-
+class CartSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Cart
-        execlude = ("date_created")
+        fields = '__all__'
