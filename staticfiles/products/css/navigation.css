@@ -1,0 +1,27 @@
+.nav-link {
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    font-weight: 500;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: #007bff !important;
+    color: white !important;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.btn {
+    font-weight: 500;
+}
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        align-items: center !important; /* Center buttons */
+    }
+    .nav-item {
+        width: 100%; /* Make buttons full width in mobile */
+    }
+    .logout {
+        margin-top: 10px;
+    }
+}
