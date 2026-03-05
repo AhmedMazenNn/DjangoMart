@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import * 
+from .views import approved_info, search_product, List_all_products, Update_product, create_product, Dashboard
 
 urlpatterns =[
     path("approved_info/",approved_info,name="approved_info"),

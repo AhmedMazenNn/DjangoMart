@@ -3,7 +3,10 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 # Load environment variables from .env file
-load_dotenv()
+
+# Load .env only locally. HF injects env vars directly.
+if not os.getenv("HF_SPACE_ID"):
+    load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,7 +36,7 @@ INSTALLED_APPS = [
     # Local apps
     "inventory",
     "orders",
-    "shipment",
+    "shipment.apps.ShipmentConfig",
     "accounts",
 
     # Third-party

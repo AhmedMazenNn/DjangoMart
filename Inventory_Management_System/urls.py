@@ -19,22 +19,16 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("invent/", include('inventory.urls')),
-    path("shipment/",include('shipment.urls')),
-    path("", include("accounts.urls")),
-    path('orders/', include('orders.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
 from django.http import JsonResponse
-from django.urls import path
 
 def health(request):
     return JsonResponse({"status": "ok"})
 
 urlpatterns = [
     path("health/", health),
-    # existing urls...
-]
+    path('admin/', admin.site.urls),
+    path("invent/", include('inventory.urls')),
+    path("shipment/",include('shipment.urls')),
+    path("", include("accounts.urls")),
+    path('orders/', include('orders.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

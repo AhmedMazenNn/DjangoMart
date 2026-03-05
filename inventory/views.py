@@ -8,10 +8,7 @@ from django.db.models import Count, F
 from .forms import ProductForm
 from django.urls import reverse_lazy
 from django.contrib import messages
-import pandas as pd 
 from itertools import chain
-import plotly.express as px
-import plotly.offline as pyo
 
 def search_product(request):
     query = request.GET.get("query", "").strip()
@@ -77,6 +74,10 @@ class Dashboard(LoginRequiredMixin,UserPassesTestMixin, View):
         shipment_count = Shipment.objects.count()
         order_count = Order.objects.count()
         product_count = Product.objects.count()
+
+        import pandas as pd
+        import plotly.express as px
+        import plotly.offline as pyo
 
         context = {
             'shipment_count': shipment_count,
