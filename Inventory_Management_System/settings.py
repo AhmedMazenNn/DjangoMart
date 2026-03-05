@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
-
+from urllib.parse import urlparse
 # Load environment variables from .env file
 load_dotenv()
 
