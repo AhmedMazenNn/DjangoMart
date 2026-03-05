@@ -26,3 +26,15 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path('orders/', include('orders.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+from django.http import JsonResponse
+from django.urls import path
+
+def health(request):
+    return JsonResponse({"status": "ok"})
+
+urlpatterns = [
+    path("health/", health),
+    # existing urls...
+]
