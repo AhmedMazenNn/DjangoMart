@@ -61,13 +61,17 @@ class create_product(LoginRequiredMixin,CreateView):
 
 
 
-class Dashboard(LoginRequiredMixin,UserPassesTestMixin, View):
+from inventory.analytics import build_dashboard_chart
+
+class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request):
         return render(request, "accounts/dashboard.html")
+
     def test_func(self):
         return self.request.user.role == "manager"
+
     def handle_no_permission(self):
-        messages.error(self.request,"you have no access to dashboard ")
+        messages.error(self.request, "you have no access to dashboard ")
         return redirect("home")
 
     def post(self, request, query_name):
@@ -75,15 +79,22 @@ class Dashboard(LoginRequiredMixin,UserPassesTestMixin, View):
         order_count = Order.objects.count()
         product_count = Product.objects.count()
 
-        import pandas as pd
-        import plotly.express as px
-        import plotly.offline as pyo
-
         context = {
-            'shipment_count': shipment_count,
-            'order_count': order_count,
-            'product_count': product_count,
+            "shipment_count": shipment_count,
+            "order_count": order_count,
+            "product_count": product_count,
         }
+
+        chart_div = build_dashboard_chart(
+            query_name=query_name,
+            Product=Product,
+            Shipment=Shipment,
+            Order=Order,
+        )
+        if chart_div:
+            context["img"] = chart_div
+
+        return render(request, "accounts/dashboard.html", context)
 
         def create_chart(df, x_col, y_col, title, color):
             """Generates a clean and professional bar chart."""
