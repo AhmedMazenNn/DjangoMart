@@ -86,16 +86,25 @@ WSGI_APPLICATION = "Inventory_Management_System.wsgi.application"
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Production / Neon database
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True
+            conn_max_age=600,   # keep connections open (important)
+            ssl_require=True,
         )
     }
+
+    # Hardening + prevent long handshake/hangs
+    DATABASES["default"].setdefault("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"].update({
+        "connect_timeout": 5,
+        "keepalives": 1,
+        "keepalives_idle": 30,
+        "keepalives_interval": 10,
+        "keepalives_count": 5,
+    })
+
 else:
-    # Fallback for local development or build time
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
