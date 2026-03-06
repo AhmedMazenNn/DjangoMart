@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import * 
+from views import analytics_view
 
 urlpatterns =[
     path("approved_info/",approved_info,name="approved_info"),
