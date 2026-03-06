@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import * 
-from views import analytics_view
 
 urlpatterns =[
     path("approved_info/",approved_info,name="approved_info"),
@@ -10,5 +9,4 @@ urlpatterns =[
     path("update_product/<int:pk>/", Update_product.as_view(), name="update_product"),
     path("add_product/",create_product.as_view(),name="add_product"),
     path("insights/<str:query_name>/", Dashboard.as_view(), name="insights"),
-    path("analytics/", views.analytics_view),
-]
+    ]

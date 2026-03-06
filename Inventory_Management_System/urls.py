@@ -31,14 +31,4 @@ urlpatterns = [
     path("shipment/",include('shipment.urls')),
     path("", include("accounts.urls")),
     path('orders/', include('orders.urls')),
-    path("db-ping/", db_ping),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-from django.db import connection
-from django.http import JsonResponse
-
-def db_ping(request):
-    with connection.cursor() as cur:
-        cur.execute("SELECT 1;")
-        cur.fetchone()
-    return JsonResponse({"db": "ok"})
